@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 module.exports = mongoose.model('Contact', new Schema({
+    username: { type: String },
     noms: { type: String },
     prenoms: { type: String },
     telephone: { type: String},

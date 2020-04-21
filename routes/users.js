@@ -12,7 +12,7 @@ router.put('/:id', authController.verifyAccessToken, userController.updateUser);
 
 router.post('/auth', authController.authenticate);
 
-router.get('/logout', (req, res, next) => {
+router.get('/auth/logout', (req, res, next) => {
     res.clearCookie('auth');
     res.render('login');
 })

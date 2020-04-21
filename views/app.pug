@@ -1,44 +1,81 @@
 div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
     header(class="mdl-layout__header")
         div(class="mdl-layout__header-row")
+            img(src="/images/drapeau_du_gabon.png", alt="Drapeau du Gabon" style="height: 80%; width: auto; padding-right: 20px")
+            h5 Suivi journalier des contacts du Covid-19
             div(class="mdl-layout-spacer")
-            div(class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right")
-                label(class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp")
-                    i(class="material-icons") search
-                div(class="mdl-textfield__expandable-holder")
-                    input(class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp")
-            div(class="mdl-layout-spacer")
-            button(class="mdl-button mdl-js-button mdl-button--icon")
+            a(href="/users/auth/logout" class="mdl-button mdl-js-button mdl-button--icon")
                 i(class="material-icons") logout
     main(class="mdl-layout__content")
-        div(class="page-content")
-            table(class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp")
-                thead
-                    tr
-                        th(class="mdl-data-table__cell--non-numeric") Noms & prénoms
-                        th Téléphone 1 et 2
-                        th Date d Naissance
-                        th Région sanitaire
-                        th Département sanitaire
-                        th Quartier / Village
-                tbody
-                    tr
-                        td(class="mdl-data-table__cell--non-numeric") Nve Orphée
-                        td 077 59 83 00 / 062 55 16 49
-                        td 02/11/1995
-                        td Arrondissement 1
-                        td Pk9
-                    
-                    tr
-                        td(class="mdl-data-table__cell--non-numeric") Nve Orphée
-                        td 077 59 83 00 / 062 55 16 49
-                        td 02/11/1995
-                        td Arrondissement 1
-                        td Pk9
-                    
-                    tr
-                        td(class="mdl-data-table__cell--non-numeric") Nve Orphée
-                        td 077 59 83 00 / 062 55 16 49
-                        td 02/11/1995
-                        td Arrondissement 1
-                        td Pk9
+        div(class="mdl-grid" style="width:1000px;margin-top:100px;")
+            div(id="contacts" class="mdl-data-tabledynamic mdl-shadow--2dp")
+                div(class="mdl-data-tabledynamic__title")
+                    h2(class="mdl-data-tabledynamic__title-text") Contacts
+                    div(class="mdl-data-tabledynamic__actions")
+                        a(class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row" id="add-contact-button") Ajouter un contact
+
+                div(class="mdl-data-tabledynamic__content")
+                    table(class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp")
+                        thead
+                            tr
+                                th(class="mdl-data-table__cell--non-numeric") Noms & prénoms
+                                th Téléphone 1 et 2
+                                th Date d Naissance
+                                th Identifiant  
+                                th Etat
+                                th Actions
+                        tbody
+                            each val in contacts
+                                - var ficheLink = "/fiche/" + val._id;
+                                tr
+                                    td(class="mdl-data-table__cell--non-numeric") #{val.noms} #{val.prenoms} 
+                                    td #{val.telephone}
+                                    td #{val.date_naissance.toString()}
+                                    td #{val.username}
+                                    td #{val.state}
+                                    td
+                                        a(href=ficheLink target="blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row") fiche
+
+
+dialog(class="mdl-dialog" id="newcontact-dialog")
+    h4(class="mdl-dialog__title") Ajouter un nouveau contact
+    form(action="/contacts", method="post")
+        div(class="mdl-dialog__content mdl-grid")
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="username" id="username")
+                label(class="mdl-textfield__label" for="username") Identifiant
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="noms" id="noms")
+                label(class="mdl-textfield__label" for="noms") Noms
+            
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="prenoms" id="prenoms")
+                label(class="mdl-textfield__label" for="prenoms") Prénoms
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="telephone" id="tel")
+                label(class="mdl-textfield__label" for="tel") Téléphone 1 et 2
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="date" name="date_naissance" id="date_naissance")
+                label(class="mdl-textfield__label" for="date_naissance") Date de Naissance
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="region_sanitaire" id="rs")
+                label(class="mdl-textfield__label" for="rs") Région Sanitaire
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="arrondissement" id="arrond")
+                label(class="mdl-textfield__label" for="arrond") Département sanitaire / arrondissement
+
+            div(class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="quartier" id="quartier")
+                label(class="mdl-textfield__label" for="quartier") Quartier/village
+        
+        div(class="mdl-dialog__actions")
+            button(type="submit" class="mdl-button create") Créer
+            button(type="button" class="mdl-button close") Annuler
+                      
+
+script(src="/javascripts/app.js" type="module")

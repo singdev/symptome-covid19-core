@@ -2,7 +2,7 @@ const Contact = require('../models/ContactModel');
 
 module.exports = {
 
-    createContact(req, res, next) {
+    async createContact(req, res, next) {
         const contact = new Contact(req.body);
         try {
             const newContact = await contact.save();
@@ -12,12 +12,12 @@ module.exports = {
         }
     },
 
-    getAllContact(req, res, next) {
+    async getAllContact(req, res, next) {
         const conctats = await Contact.find({});
         res.send(conctats);
     },
 
-    updateContact(req, res, next) {
+    async updateContact(req, res, next) {
         if(!req.params.id){
             res.sendStatus(403);
             return;
@@ -26,6 +26,4 @@ module.exports = {
 
         res.send(contact);
     }
-
-
 }
