@@ -6,7 +6,8 @@ module.exports = {
         const contact = new Contact(req.body);
         try {
             const newContact = await contact.save();
-            res.send(newContact);
+            const contacts = await Contact.find({});
+            res.render('index', { title: "Centre Opérationnel de Riposte aux Epidémies", contacts});
         } catch (err) {
             res.send(500);
         }
@@ -22,6 +23,7 @@ module.exports = {
             res.sendStatus(403);
             return;
         }
+        const id = req.params.id
         const contact = await Contact.findOneAndUpdate({ _id: id }, req.body);
 
         res.send(contact);

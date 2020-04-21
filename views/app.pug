@@ -7,7 +7,7 @@ div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
             a(href="/users/auth/logout" class="mdl-button mdl-js-button mdl-button--icon")
                 i(class="material-icons") logout
     main(class="mdl-layout__content")
-        div(class="mdl-grid" style="width:1000px;margin-top:100px;")
+        div(class="mdl-grid" style="margin-top: 100px")
             div(id="contacts" class="mdl-data-tabledynamic mdl-shadow--2dp")
                 div(class="mdl-data-tabledynamic__title")
                     h2(class="mdl-data-tabledynamic__title-text") Contacts
@@ -15,27 +15,35 @@ div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
                         a(class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row" id="add-contact-button") Ajouter un contact
 
                 div(class="mdl-data-tabledynamic__content")
-                    table(class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp")
+                    table(class="mdl-data-table mdl-js-data-table mdl-shadow--2dp")
                         thead
                             tr
                                 th(class="mdl-data-table__cell--non-numeric") Noms & prénoms
-                                th Téléphone 1 et 2
-                                th Date d Naissance
+                                th(class="responsive-rm") Téléphone 1 et 2
+                                th(class="responsive-rm") Date d Naissance
                                 th Identifiant  
-                                th Etat
+                                th(class="responsive-rm") Etat
                                 th Actions
                         tbody
                             each val in contacts
                                 - var ficheLink = "/fiche/" + val._id;
+                                - var date = val.date_naissance; 
+                                - var date_naissance = (date.getDate() < 10 ? '0' : '') + date.getDate() + "/" + (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1) + "/" + date.getFullYear();
                                 tr
                                     td(class="mdl-data-table__cell--non-numeric") #{val.noms} #{val.prenoms} 
-                                    td #{val.telephone}
-                                    td #{val.date_naissance.toString()}
+                                    td(class="responsive-rm") #{val.telephone}
+                                    td(class="responsive-rm")=date_naissance
                                     td #{val.username}
-                                    td #{val.state}
+                                    td(class="responsive-rm")  #{val.state}
                                     td
+                                        a(class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row" onclick="showUpdateContactModal('"+ JSON.stringify(val).replace("'", "\\'") +"')") Modifier
                                         a(href=ficheLink target="blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row") fiche
 
+        footer(class="demo-footer mdl-mini-footer")
+            div(class="mdl-mini-footer--left-section")
+                ul(class="mdl-mini-footer--link-list")
+                    li 
+                        a(href="https://www.sing.ga") Développé par SING SA
 
 dialog(class="mdl-dialog" id="newcontact-dialog")
     h4(class="mdl-dialog__title") Ajouter un nouveau contact
@@ -76,6 +84,55 @@ dialog(class="mdl-dialog" id="newcontact-dialog")
         div(class="mdl-dialog__actions")
             button(type="submit" class="mdl-button create") Créer
             button(type="button" class="mdl-button close") Annuler
+
+dialog(class="mdl-dialog" id="updatecontact-dialog")
+    h4(class="mdl-dialog__title") Modifier les informations
+    form(action="/contacts", class="update-form" method="post")
+        div(class="mdl-dialog__content mdl-grid")
+            div(id="tf-username" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="username" id="username")
+                label(class="mdl-textfield__label" for="username") Identifiant
+
+            div(id="tf-noms" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="noms" id="noms")
+                label(class="mdl-textfield__label" for="noms") Noms
+            
+            div(id="tf-prenoms" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="prenoms" id="prenoms")
+                label(class="mdl-textfield__label" for="prenoms") Prénoms
+
+            div(id="tf-tel" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="telephone" id="tel")
+                label(class="mdl-textfield__label" for="tel") Téléphone 1 et 2
+
+            div(id="tf-date_naissance" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="date" name="date_naissance" id="date_naissance")
+                label(class="mdl-textfield__label" for="date_naissance") Date de Naissance
+
+            div(id="tf-rs" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="region_sanitaire" id="rs")
+                label(class="mdl-textfield__label" for="rs") Région Sanitaire
+
+            div(id="tf-arrond" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="arrondissement" id="arrond")
+                label(class="mdl-textfield__label" for="arrond") Département sanitaire / arrondissement
+
+            div(id="tf-quartier" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                input(class="mdl-textfield__input" type="text" name="quartier" id="quartier")
+                label(class="mdl-textfield__label" for="quartier") Quartier/village
+            
+            div(id="tf-state" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet")
+                select(class="mdl-textfield__input" type="text" name="state" id="state")
+                    option(value="CONF") En soins
+                    option(value="DEC") Décédé
+                    option(value="GUE") Guérit
+                label(class="mdl-textfield__label" for="state") Etat
+        
+        div(class="mdl-dialog__actions")
+            button(type="submit" class="mdl-button update") Mettre à jour
+            button(type="button" class="mdl-button close") Annuler
                       
 
-script(src="/javascripts/app.js" type="module")
+script(src="https://code.jquery.com/jquery-3.5.0.min.js")
+script(src="/module/index.js" type="module")
+script(src="/javascripts/app.js")

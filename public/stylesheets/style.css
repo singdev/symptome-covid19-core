@@ -52,7 +52,6 @@
 .page-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 16px;
 }
 
@@ -130,6 +129,11 @@
   font-weight: 400 !important;
 }
 
+.mdl-grid {
+  align-items: center;
+  justify-content: center;
+}
+
 .mdl-data-tabledynamic__title-text {
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
@@ -170,4 +174,32 @@
 
 .mdl-dialog {
   width: 400px;
+}
+
+footer {
+  margin-top: 80px;
+}
+
+@media only screen and (max-width: 600px) {
+  h5 {
+    display: none;
+  }
+
+  .responsive-rm {
+    display: none;
+  }
+
+  .mdl-data-table {
+    table-layout:fixed;
+    width:100%; 
+  }
+  
+  td, th {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+  }
+  
 }

@@ -8,6 +8,6 @@ router.post('/', authController.verifyAccessToken, contactController.createConta
 
 router.get('/', authController.verifyAccessToken, contactController.getAllContact);
 
-router.put('/:id', authController.verifyAccessToken, contactController.updateContact);
+router.post('/:id', authController.verifyAccessToken, contactController.updateContact);
 
 module.exports = router;
