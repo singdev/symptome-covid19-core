@@ -1,5 +1,6 @@
 const request = require('request');
 const PDFDocument = require('pdfkit');
+const PdfTable = require('voilab-pdf-table');
 
 module.exports = class {
 
@@ -20,7 +21,7 @@ module.exports = class {
      * 
      * @param {PDFDocument} doc 
      */
-    async template(doc) {
+    async template(doc, contact, user) {
 
         let nextY = 0;
         let nextX = 0;
@@ -38,7 +39,7 @@ module.exports = class {
         nextX = doc.x;
 
         try {
-            const img = await this.requestImageSync('http://localhost:3000/images/drapeau_du_gabon.png');
+            const img = await this.requestImageSync('http://localhost:3001/images/drapeau_du_gabon.png');
             doc.image(img, 500, 20, { width: 80 });
         } catch (error) {
             console.log(error);
@@ -49,78 +50,73 @@ module.exports = class {
         doc.text("Fiche de suivi journalier des contacts de Covid-19", { width: 600, align: 'center' })
 
         doc.moveDown(2);
-        nextX = doc.x + 50;
-        nextY = doc.y;
-        doc.text("Agent de suivi", nextX, nextY, { width: 250, align: 'center', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 250, 20).stroke();
+        
+        //Premier tableau
+        const table = new PdfTable(doc, {
+            bottomMargin: 30,
+            padding: 10
+        });
 
-        nextX = nextX + 250;
-        doc.text("Contact", nextX, nextY, { width: 250, align: 'center', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 250, 20).stroke();
+        table
+            // add some plugins (here, a 'fit-to-width' for a column)
+            .addPlugin(new (require('voilab-pdf-table/plugins/fitcolumn'))({
+                column: 'description'
+            }))
+            // set defaults to your columns
+            .setColumnsDefaults({
+                headerBorder: 'B',
+                align: 'right',
+                
+            })
+            // add table columns
+            .addColumns([
+                {
+                    id: 'agent',
+                    header: 'Agent de suivi',
+                    align: 'left',
+                    border: 'B',
+                    width: 150
+                    
+                },
+                {
+                    id: 'agent_value',
+                    header: '',
+                    border: 'B',
+                    align: 'left',
+                    width: 150
+                },
+                {
+                    id: 'contact',
+                    header: 'Contact',
+                    width: 100,
+                    border: 'B',
+                    align: 'left'
 
-        //Agent de suivi
-        //Noms
-        nextX = doc.x - 250;
-        nextY = doc.y;
-        doc.text("Noms", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
+                },
+                {
+                    id: 'contact_value',
+                    header: '',
+                    border: 'B',
+                    width: 150,
+                    align: 'left'
+                },
+            ])
+            // add events (here, we draw headers on each new page)
+            .onPageAdded(function (tb) {
+                tb.addHeader();
+            });
 
-        //Prenoms
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Noms", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
 
-        //Téléphone
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Téléphone", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Qualification", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
-
-        //Qualification
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Qualification", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
-
-        //Région sanitaire
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Région sanitaire", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
-
-        //Département sanitaire/arrondissement
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Département sanitaire/arrondissement", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
-
-        //Prenoms
-        nextX = doc.x - 100;
-        nextY = doc.y;
-        doc.text("Quartier/village", nextX, nextY, { width: 100, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 100, 20).stroke();
-        nextX = nextX + 100;
-        doc.text("Nve Orphée", nextX, nextY, { width: 150, align: 'left', paragraphGap: 5, indent: 5 })
-        doc.rect(nextX, nextY - 5, 150, 20).stroke();
+        // draw content, by passing data to the addBody method
+        table.addBody([
+            { agent: 'Noms', agent_value:  user.noms, contact: "Noms", contact_value: contact.noms},
+            { agent: 'Prénoms', agent_value:  user.prenoms, contact: "Prénoms", contact_value: contact.prenoms},
+            { agent: 'Téléphone', agent_value:  user.telephone, contact: "Téléphone 1 et 2", contact_value: contact.telephone},
+            { agent: 'Qualification', agent_value:  user.qualification, contact: "Date de Naissance", contact_value: contact.date_naissance},
+            { agent: 'Région sanitaire', agent_value:  user.region_sanitaire, contact: "Région sanitaire", contact_value: contact.region_sanitaire},
+            { agent: 'Départements sanitaire/arrondissement', agent_value:  user.arrondissement, contact: "Département sanitaire/arrondissement", contact_value: contact.arrondissement},
+            { agent: 'Quartier/village', agent_value:  user.quartier, contact: "Quartier/village", contact_value: contact.quartier},
+        ]);
 
     }
 }
