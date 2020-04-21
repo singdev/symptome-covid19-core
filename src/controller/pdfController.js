@@ -1,6 +1,7 @@
 const PDFDocument = require('pdfkit');
-const PDF = require('../models/PDF');
+const axios = require('axios');
 
+const PDF = require('../models/PDF');
 const Contact = require('../models/ContactModel');
 const User = require('../models/UserModel');
 
@@ -15,14 +16,14 @@ module.exports = {
         const user = await User.findOne({ _id: req.auth.credentials })
         
         //Télécharger les information sur les symptômes du contact
-        //TODO
+        const trackingResponse = await axios.get('http://54.38.190.167:20201/tracking/search/by-username/' + contact.username);
 
         const doc = new PDFDocument({ autoFirstPage: false});
         doc.pipe(res);
 
         doc.addPage({ margin: 20 });
         const fiche = new PDF();
-        await fiche.template(doc, contact, user);
+        await fiche.template(doc, contact, user, trackingResponse.data[trackingResponse.data.length-1]);
         doc.end();
     }
 }
