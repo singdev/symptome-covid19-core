@@ -41,6 +41,7 @@ module.exports = {
                     const fullname2 = b.noms + ' ' + b.prenoms;
                     return fullname1.localeCompare(fullname2);
                 })
+                res.redirect('/');
                 res.render('index', { title: 'Centre Opérationnel de Riposte au Epidémies', contacts });
             } else {
                 res.status(403)
@@ -50,6 +51,7 @@ module.exports = {
                     const fullname2 = b.noms + ' ' + b.prenoms;
                     return fullname1.localeCompare(fullname2);
                 })
+                res.redirect('/');
                 res.render('index', { title: 'Centre Opérationnel de Riposte au Epidémies', contacts });
             }
         } else {

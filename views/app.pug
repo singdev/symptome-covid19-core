@@ -36,14 +36,17 @@ div(class="mdl-layout mdl-js-layout mdl-layout--fixed-header")
                                     td #{val.username}
                                     td(class="responsive-rm")  #{val.state}
                                     td
-                                        a(class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row" onclick="showUpdateContactModal('"+ JSON.stringify(val).replace("'", "\\'") +"')") Modifier
-                                        a(href=ficheLink target="blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row") fiche
+                                        a(class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row" onclick="showUpdateContactModal('"+ JSON.stringify(val).replace("'", "\\'") +"')")
+                                            i(class="material-icons") edit
+                                        a(href=ficheLink target="blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-row")
+                                            i(class="material-icons") insert_drive_file
 
         footer(class="demo-footer mdl-mini-footer")
             div(class="mdl-mini-footer--left-section")
                 ul(class="mdl-mini-footer--link-list")
                     li 
                         a(href="https://www.sing.ga") Développé par SING SA
+
 
 dialog(class="mdl-dialog" id="newcontact-dialog")
     h4(class="mdl-dialog__title") Ajouter un nouveau contact
