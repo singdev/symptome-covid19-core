@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+a {
+  color: #00B7FF;
+}
+
+.drapeau-gabon {
+  width: 10vw;
+  height: auto;
+}
+
+.ribbon {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  background-color: #3F51B5;
+  padding: 20px;
+  color: white;
+  height: 50vh;
+  margin-bottom: 2%;
+}
+
+.ribbon h3 {
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin-top: -20vh;
+  margin-bottom: 40vh;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
