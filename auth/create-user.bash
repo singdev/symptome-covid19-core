@@ -4,6 +4,6 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -d @root.
 
 token=`cat token.txt`;
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -H "authorization: Bearer ${token}" -d @orphee.json http://localhost:3001/users
+curl -H "Accept: application/json" -H "Content-Type: application/json" -H "authorization: Bearer ${token}" -d @rufus.json http://localhost:3001/users
 
 rm token.txt
