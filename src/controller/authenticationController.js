@@ -75,5 +75,29 @@ module.exports = {
             console.log(error);
             response.sendStatus(500);
         }
+    },
+
+    async verifyAccessTokenForRoot(request, response, next) {
+        const header = request.headers['authorization'];
+
+        if(!header || !header.includes('Bearer ')){
+            response.sendStatus(401);
+            return;
+        }
+
+        const accessToken = header.split(' ')[1];
+        try {
+            console.log(accessToken);
+            const decoded = await jwt.verify(accessToken, JWT_SECRET)
+
+            request.auth = {
+                credentials: decoded.uid,
+                artifact: { accessToken }
+            }
+            next()
+        } catch (error) {
+            console.log(error);
+            response.sendStatus(500);
+        }
     }
 }

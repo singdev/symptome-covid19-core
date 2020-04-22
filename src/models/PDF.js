@@ -47,7 +47,7 @@ module.exports = class {
         nextX = doc.x;
 
         try {
-            const img = await this.requestImageSync('http://localhost:3001/images/drapeau_du_gabon.png');
+            const img = await this.requestImageSync('http://localhost:20022/images/drapeau_du_gabon.png');
             doc.image(img, 500, 20, { width: 80 });
         } catch (error) {
             console.log(error);

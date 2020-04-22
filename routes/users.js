@@ -6,7 +6,7 @@ var authController = require('../src/controller/authenticationController');
 /* GET users listing. */
 router.get('/:id', authController.verifyAccessToken, userController.getUser);
 
-router.post('/', authController.verifyAccessToken, userController.createUser);
+router.post('/', authController.verifyAccessTokenForRoot, userController.createUser);
 
 router.put('/:id', authController.verifyAccessToken, userController.updateUser);
 
